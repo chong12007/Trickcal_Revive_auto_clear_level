@@ -1,7 +1,7 @@
 # Only Work For Korea Version
 
 ### After completing some level new features will be unlock and the game will guide you to the new features
-### Therefore dont use it before chapter 3
+### The program will stop, Therefore dont use it before chapter 3
 
 ## What it Does
 * Auto continue to next level fight
