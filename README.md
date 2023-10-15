@@ -1,5 +1,7 @@
 # Only Work For Korea Version
 
+### After completing some level new features will be unlock and the game will guide you to the new features
+### Therefore dont use it before chapter 3
 
 ## What it Does
 * Auto continue to next level fight
@@ -21,13 +23,11 @@
 
 ## Supported Emulator
 1.BlueStack (Tested)    
-2.MEmu (Tested)    
+2.MEmu (Not Tested)   
 3.Nox Player (not tested)    
 
 # How To Use
 * Adjust The Screen
-* Stay on Momotalk screen and click Momotalk Button
-* Stay on Main Quest (only work if the "new" icon is there) and click Main Quest
+* Stay on the latest chapter and press start
 * Make sure to set the battle to 3x speed and auto skill
-* Dont work on final chapter that required to moving
 * Click the exit on the gui to stop running
