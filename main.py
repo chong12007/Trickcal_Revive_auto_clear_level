@@ -5,6 +5,8 @@ import webbrowser
 import PySimpleGUI as sg
 import pygetwindow as gw
 
+battle_timer_seconds = 120
+skip_battle_process_check = False
 
 def display_ui():
     # Set a Layout
@@ -16,7 +18,9 @@ def display_ui():
         [],
         [sg.Multiline('', key='_Multiline_', size=(48, 7), autoscroll=True)],
         [sg.Button("Adjust Screen", key="adjust_screen", button_color="#509296")],
-        [sg.Button("Start Clear Level ", key="start", button_color="#509296")],
+        [sg.Button("Clear Main Story Level ", key="main_story", button_color="#509296")] +
+        [sg.Button("Clear Event Level", key="event", button_color="#509296")],
+        [sg.Button("Edit Battle Timer", key="battle_timer", button_color="#509296")],
         [sg.Text("Please leave a star on my github if this script helps you T^T,Click me to github", key="github",
                  enable_events=True, text_color='blue', background_color="#f0f0f0")]
     ]
@@ -31,20 +35,24 @@ def display_ui():
     menu_height = 30
 
     menu_popup_location = (menu_width, menu_height)  # Specify the desired coordinates of the menu
-    menu_size = (400, 350)  # Width, Height
+    menu_size = (400, 380)  # Width, Height
     menu_theme = "SystemDefaultForReal"  # Replace with the desired theme name
     sg.theme(menu_theme)
 
-    menu = sg.Window("MHN", layout, location=menu_popup_location, keep_on_top=True, size=menu_size)
+    menu = sg.Window("Trickcal Review", layout, location=menu_popup_location, keep_on_top=True, size=menu_size)
 
     # Infinite Loop
     while True:
         # Read user event
         event, values = menu.read()
 
-        if event == "start":
-            menu["row1"].update("Start Finding New Level...\n")
-            clear_battle(menu)
+        if event == "main_story":
+            menu["row1"].update("Clear Main Story Level...\n")
+            clear_battle(menu,False)
+
+        if event == "event":
+            menu["row1"].update("Clear Event Level...\n")
+            clear_battle(menu,True)
 
         if event == "adjust_screen" and screen_resolution_height == 1080:
             if screen_resolution_height != 1080:
@@ -57,8 +65,14 @@ def display_ui():
             adjust_screen(menu)
             pass
 
+        if event == "battle_timer":
+            global battle_timer_seconds
+
+            battle_timer_seconds = sg.popup_get_text("Enter Battle Timer in Seconds: (Default is 120 seconds)")
+
+
         if event == "github":
-            webbrowser.open("https://github.com/chong12007/Monster_Hunter_Now_auto_script")
+            webbrowser.open("https://github.com/chong12007/Trickcal_Review_Script")
 
         # Close app
         if event is None or event == sg.WINDOW_CLOSED:
@@ -151,19 +165,34 @@ def start_battle_process(menu):
                 return False
 
 
-def clear_battle(menu):
+def clear_battle(menu,is_event):
+    global skip_battle_process_check
+
     while True:
-        is_battle_start = start_battle_process(menu)
-        if is_battle_start is False:
+        # For clearing battle, start battle without level selecting
+        if skip_battle_process_check:
+            coordinate = utils.get_icon_coordinate("img/start_battle.png")
+            utils.click(coordinate, "Start battle\n", menu)
+            is_battle_start = True
+        else:
+            is_battle_start = start_battle_process(menu)
+
+        if is_battle_start and is_event:
+            pass
+
+        elif is_battle_start is False:
             utils.update_gui_msg("Error Occur on Finding New Level\n", menu)
-            utils.update_gui_msg("Please Press Start again...\n", menu)
+            utils.update_gui_msg("Please Select Task again...\n", menu)
             return
 
         try:
             is_battle_ended = False
             while not is_battle_ended:
-                utils.update_gui_msg("Sleep 150 Seconds\n", menu)
-                time.sleep(150)
+                global battle_timer_seconds
+                battle_timer_seconds = int(battle_timer_seconds)
+                msg = f"Sleep {battle_timer_seconds} Seconds\n"
+                utils.update_gui_msg(msg, menu)
+                time.sleep(battle_timer_seconds)
                 coordinate = utils.get_icon_coordinate("img/continue_battle.png")
                 if coordinate is None:
                     utils.update_gui_msg("Battle still not ended yet\n", menu)
@@ -171,9 +200,15 @@ def clear_battle(menu):
 
                 is_battle_ended = True
                 utils.click(coordinate, "Continue to next level\n", menu)
-                utils.click(coordinate, "Sleep 20 Seconds for animation", menu)
-                time.sleep(20)
-                utils.click(coordinate, "", menu)
+                utils.click(coordinate, "Sleep 25 Seconds for animation\n", menu)
+                time.sleep(25)
+                if is_event is False :
+                    utils.click(coordinate, "", menu)
+                else:
+                    skip_battle_process_check = True
+
+
+
 
         except Exception as e:
             pass

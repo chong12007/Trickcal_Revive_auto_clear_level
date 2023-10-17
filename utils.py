@@ -33,7 +33,7 @@ def get_icon_coordinate(icon_path):
 
     # Get the matched location within the ROI
     # Set a threshold for the match
-    threshold = 0.03
+    threshold = 0.08
 
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
     print(min_val)
@@ -50,4 +50,4 @@ def get_icon_coordinate(icon_path):
 
 
 if __name__ == '__main__':
-    coordinate = get_icon_coordinate("img/new_level.png")
+    coordinate = get_icon_coordinate("img/continue_battle.png")
