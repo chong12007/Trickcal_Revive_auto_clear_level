@@ -49,5 +49,7 @@ def get_icon_coordinate(icon_path):
         return None
 
 
+
+
 if __name__ == '__main__':
-    coordinate = get_icon_coordinate("img/continue_battle.png")
+    coordinate = get_icon_coordinate("img/enter_level_icon5.png")

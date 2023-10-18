@@ -5,8 +5,9 @@ import webbrowser
 import PySimpleGUI as sg
 import pygetwindow as gw
 
+
 battle_timer_seconds = 120
-menu = sg.Window("Trickcal Review")
+menu = sg.Window("Trickcal Revive")
 
 
 def display_ui():
@@ -16,13 +17,16 @@ def display_ui():
                  background_color="#f0f0f0")],
         [sg.Text("Please Adjust the screen before using", key="row2", text_color="#509296",
                  font=("Helvetica", 12, "bold"), background_color="#f0f0f0")],
-        [],
         [sg.Multiline('', key='_Multiline_', size=(48, 7), autoscroll=True)],
-        [sg.Button("Adjust Screen", key="adjust_screen", button_color="#509296")],
-        [sg.Button("Clear Level ", key="main_story", button_color="#509296")],
 
+        [sg.Button("Adjust Screen", key="adjust_screen", button_color="#509296")] +
         [sg.Button("Edit Battle Timer", key="battle_timer", button_color="#509296")],
-        [sg.Text("Please leave a star on my github if this script helps you T^T,Click me to github", key="github",
+        [sg.Button("Clear MQ or Event ", key="main_story", button_color="#509296")] +
+        [sg.Button("How To Use ", key="help_mq", button_color="#509296")],
+        [sg.Button("Clear Dungeon      ", key="dungeon", button_color="#509296")] +
+        [sg.Button("How To Use ", key="help_dungeon", button_color="#509296")],
+
+        [sg.Text("Please leave a star on my github", key="github",
                  enable_events=True, text_color='blue', background_color="#f0f0f0")]
     ]
 
@@ -36,12 +40,12 @@ def display_ui():
     menu_height = 30
 
     menu_popup_location = (menu_width, menu_height)  # Specify the desired coordinates of the menu
-    menu_size = (400, 400)  # Width, Height
+    menu_size = (400, 420)  # Width, Height
     menu_theme = "SystemDefaultForReal"  # Replace with the desired theme name
     sg.theme(menu_theme)
 
     global menu
-    menu = sg.Window("Trickcal Review", layout, location=menu_popup_location, keep_on_top=True, size=menu_size)
+    menu = sg.Window("Trickcal Revive", layout, location=menu_popup_location, keep_on_top=True, size=menu_size)
 
     # Infinite Loop
     while True:
@@ -49,7 +53,7 @@ def display_ui():
         event, values = menu.read()
 
         if event == "main_story":
-            menu["row1"].update("Clear  Level...\n")
+            menu["row1"].update("Clear Level...\n")
             clear_battle()
 
         if event == "adjust_screen" and screen_resolution_height == 1080:
@@ -127,6 +131,9 @@ def display_ui():
             adjust_screen()
             pass
 
+        if event == "dungeon" :
+            sg.popup_no_buttons('Text', title='Über uns', text_color=('#F7F6F2'), keep_on_top=True, image="img/start_level.png")
+
         if event == "battle_timer":
             global battle_timer_seconds
 
@@ -150,21 +157,21 @@ def clear_battle():
 
             while error_count < max_error_count:
                 try:
-                    coordinate = utils.get_icon_coordinate("img/new_level.png")
+                    coordinate = utils.get_icon_coordinate("img/new_level_icon.png")
                     if coordinate is None:
                         raise Exception
 
                     utils.click(coordinate, "New Level detected\n", menu)
-                    coordinate = utils.get_icon_coordinate("img/battle_entry.png")
+                    coordinate = utils.get_icon_coordinate("img/enter_level_icon.png")
                     utils.click(coordinate, "Entering New Level\n", menu)
-                    coordinate = utils.get_icon_coordinate("img/start_battle.png")
+                    coordinate = utils.get_icon_coordinate("img/start_level.png")
                     utils.click(coordinate, "Start battle\n", menu)
                     error_count = 0
                     return True
 
                 except Exception:  # Increment the error count
                     error_count += 1
-                    coordinate = utils.get_icon_coordinate("img/start_battle.png")
+                    coordinate = utils.get_icon_coordinate("img/start_level.png")
 
                     if coordinate is not None:
                         utils.click(coordinate, "Start battle\n", menu)
@@ -188,7 +195,7 @@ def clear_battle():
                 msg = f"Sleep {battle_timer_seconds} Seconds\n"
                 utils.update_gui_msg(msg, menu)
                 time.sleep(battle_timer_seconds)
-                coordinate = utils.get_icon_coordinate("img/continue_battle.png")
+                coordinate = utils.get_icon_coordinate("img/continue_to_next_level_icon.png")
                 if coordinate is None:
                     coordinate = (coordinate[0] - 300, coordinate[1])
                     utils.click(coordinate, "", menu)
