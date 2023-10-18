@@ -190,6 +190,8 @@ def clear_battle():
                 time.sleep(battle_timer_seconds)
                 coordinate = utils.get_icon_coordinate("img/continue_battle.png")
                 if coordinate is None:
+                    coordinate = (coordinate[0] - 300, coordinate[1])
+                    utils.click(coordinate, "", menu)
                     utils.update_gui_msg("Battle still not ended yet\n", menu)
                     continue
 
