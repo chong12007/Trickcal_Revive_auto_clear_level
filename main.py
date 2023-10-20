@@ -25,7 +25,7 @@ def create_menu_gui():
         [sg.Button("Clear Dungeon      ", key="dungeon", button_color="#509296")] +
         [sg.Button("How To Use ", key="help_dungeon", button_color="#509296")],
 
-        [sg.Text("Please leave a star on my github", key="github",
+        [sg.Text("Please leave a star on my github if it helps ><", key="github",
                  enable_events=True, text_color='blue', background_color="#f0f0f0")]
     ]
 
@@ -96,7 +96,7 @@ def menu_function():
             battle_timer_seconds = sg.popup_get_text("Enter Battle Timer in Seconds: (Default is 120 seconds)")
 
         if event == "github":
-            webbrowser.open("https://github.com/chong12007/Trickcal_Review_Script")
+            webbrowser.open("https://github.com/chong12007/Trickcal_Revive_auto_clear_level")
 
 
 def clear_mq_event():
